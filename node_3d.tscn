@@ -34,7 +34,7 @@ sky = SubResource("Sky_4sawx")
 [node name="Node2D" type="Node3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(-0.338787, 0, 0.940863, 0, 1, 0, -0.940863, 0, -0.338787, 0, 0.143489, 0)
+transform = Transform3D(-0.338787, 0, 0.940863, 0, 1, 0, -0.940863, 0, -0.338787, 0.297619, 0.143489, 0)
 mesh = SubResource("PlaneMesh_vd5m0")
 surface_material_override/0 = SubResource("ShaderMaterial_bn6nc")
 
@@ -53,7 +53,5 @@ transform = Transform3D(1, 0, 0, 0, 0.904142, 0.427232, 0, -0.427232, 0.904142, 
 script = ExtResource("5_i2tlq")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.849417, 0.281314, -0.446489, 0.0950348, 0.913779, 0.394937, 0.519094, 0.293034, -0.802915, -0.0268892, 0, 0)
+transform = Transform3D(-0.849417, 0.281314, -0.446489, -0.257183, 0.518124, 0.815723, 0.460812, 0.807719, -0.367754, -0.0268892, 0, 0)
 shadow_enabled = true
-directional_shadow_split_1 = 0.029
-directional_shadow_blend_splits = true
