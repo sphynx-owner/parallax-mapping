@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bdy6sc2cpokkb"]
+[gd_scene load_steps=23 format=3 uid="uid://bdy6sc2cpokkb"]
 
 [ext_resource type="Shader" path="res://parallax.gdshader" id="1_43x1i"]
 [ext_resource type="Texture2D" uid="uid://oivtxrpj846u" path="res://bricks2_disp.jpg" id="2_bjkea"]
@@ -7,23 +7,43 @@
 [ext_resource type="Texture2D" uid="uid://buvqkj60458ss" path="res://bricks2.jpg" id="3_72k72"]
 [ext_resource type="Texture2D" uid="uid://blhg72k47dvtx" path="res://ganges_river_pebbles_nor_gl_1k.jpg" id="4_2obec"]
 [ext_resource type="Texture2D" uid="uid://bu6ox4g2buumh" path="res://bricks2_normal.jpg" id="4_hiapp"]
+[ext_resource type="Texture2D" uid="uid://bhc64plkmb0nq" path="res://TestHeightMap.png" id="5_254iu"]
 [ext_resource type="Script" path="res://camera_3d.gd" id="5_i2tlq"]
+[ext_resource type="Script" path="res://spot_light_3d.gd" id="10_espxk"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_vd5m0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bn6nc"]
 render_priority = 0
 shader = ExtResource("1_43x1i")
-shader_parameter/heightScale = 0.05
+shader_parameter/heightScale = 0.095
 shader_parameter/minLayers = 8.0
 shader_parameter/maxLayers = 20.0
 shader_parameter/inverse_height = true
 shader_parameter/compressed_normals = false
+shader_parameter/normal_map_enabled = true
 shader_parameter/texture_scale = Vector2(1, 1)
 shader_parameter/discard_edge = true
 shader_parameter/diffuseMap = ExtResource("3_7d35o")
 shader_parameter/normalMap = ExtResource("4_2obec")
 shader_parameter/depthMap = ExtResource("2_q0vlh")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1dh46"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ead66"]
+render_priority = 0
+shader = ExtResource("1_43x1i")
+shader_parameter/heightScale = 0.1
+shader_parameter/minLayers = 8.0
+shader_parameter/maxLayers = 20.0
+shader_parameter/inverse_height = true
+shader_parameter/compressed_normals = false
+shader_parameter/normal_map_enabled = false
+shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/discard_edge = true
+shader_parameter/diffuseMap = ExtResource("3_72k72")
+shader_parameter/normalMap = ExtResource("4_hiapp")
+shader_parameter/depthMap = ExtResource("5_254iu")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_rxek4"]
 
@@ -35,6 +55,7 @@ shader_parameter/minLayers = 8.0
 shader_parameter/maxLayers = 20.0
 shader_parameter/inverse_height = false
 shader_parameter/compressed_normals = true
+shader_parameter/normal_map_enabled = true
 shader_parameter/texture_scale = Vector2(1, 1)
 shader_parameter/discard_edge = true
 shader_parameter/diffuseMap = ExtResource("3_72k72")
@@ -60,6 +81,7 @@ shader_parameter/minLayers = 8.0
 shader_parameter/maxLayers = 32.0
 shader_parameter/inverse_height = false
 shader_parameter/compressed_normals = true
+shader_parameter/normal_map_enabled = true
 shader_parameter/texture_scale = Vector2(1, 1)
 shader_parameter/discard_edge = false
 shader_parameter/diffuseMap = ExtResource("3_72k72")
@@ -76,6 +98,11 @@ transform = Transform3D(0.022635, 0, 0.999744, 0, 1, 0, -0.999744, 0, 0.022635, 
 mesh = SubResource("PlaneMesh_vd5m0")
 surface_material_override/0 = SubResource("ShaderMaterial_bn6nc")
 
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.022635, 0, 0.999744, 0, 1, 0, -0.999744, 0, 0.022635, 0, 0.1, 2.018)
+mesh = SubResource("PlaneMesh_1dh46")
+surface_material_override/0 = SubResource("ShaderMaterial_ead66")
+
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.96389, 0.143654, 0)
 mesh = SubResource("PlaneMesh_rxek4")
@@ -85,7 +112,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_1gjei")
 environment = SubResource("Environment_hhnet")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.368743, 0.164764, -0.221929)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.189216, 0.164764, 0.0427392)
 mesh = SubResource("SphereMesh_pvnep")
 surface_material_override/0 = SubResource("ShaderMaterial_2ntl0")
 
@@ -101,6 +128,15 @@ transform = Transform3D(1, 0, 0, 0, 0.904142, 0.427232, 0, -0.427232, 0.904142, 
 script = ExtResource("5_i2tlq")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.988108, -0.0768812, 0.133162, 1.73002e-08, 0.866025, 0.5, -0.153762, -0.494055, 0.855726, -0.0268892, 0, 0)
+transform = Transform3D(-0.961411, -0.100727, 0.256012, 0.0149752, 0.910025, 0.414284, -0.274707, 0.402131, -0.8734, -0.0268892, 0, 0.307128)
 shadow_enabled = true
 directional_shadow_max_distance = 10.0
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.799549, 0.43785, 2.68145)
+light_energy = 4.731
+shadow_enabled = true
+shadow_normal_bias = 0.0
+spot_attenuation = 0.0
+spot_angle_attenuation = 0.217638
+script = ExtResource("10_espxk")

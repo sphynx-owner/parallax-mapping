@@ -14,6 +14,7 @@ uniform float maxLayers = 32.;
 
 uniform bool inverse_height = false;
 uniform bool compressed_normals = true;
+uniform bool normal_map_enabled = true;
 
 uniform vec2 texture_scale = vec2(1.0);
 
@@ -44,7 +45,7 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 tangent_view_dir, out float offset)
 	float currentLayerDepth = 0.0;
 	// the amount to shift the texture coordinates per layer (from vector P)
 	vec2 P = tangent_view_dir.xy / tangent_view_dir.z * heightScale; 
-	vec2 deltaTexCoords = P / numLayers;
+	vec2 deltaTexCoords = P / numLayers / 2.;
 
 	// get initial values
 	vec2  currentTexCoords     = texCoords;
@@ -78,10 +79,7 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 tangent_view_dir, out float offset)
 
 void fragment()
 {           
-	vec4 view_ray_origin = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2. - 1., 1., 1.0);
-	view_ray_origin.xyz /= view_ray_origin.w;
-	
-	vec3 view_direction = normalize(view_ray_origin.xyz - VERTEX);
+	vec3 view_direction =  normalize(VIEW);
 	
 	mat3 tangent_basis = mat3(
 	TANGENT,
@@ -96,8 +94,10 @@ void fragment()
 	if(discard_edge && (texCoords.x > 1.0 || texCoords.y > 1.0 || texCoords.x < 0.0 || texCoords.y < 0.0))
 	    discard;
 	
-	NORMAL_MAP =  get_normal(texCoords);
-	NORMAL_MAP_DEPTH = 2.;   
+	if(normal_map_enabled) {
+		NORMAL_MAP = get_normal(texCoords);
+		NORMAL_MAP_DEPTH = 2.;   
+	}
 
 	// get diffuse color
 	ALBEDO = get_diffuse(texCoords).rgb;
