@@ -103,4 +103,4 @@ script = ExtResource("5_i2tlq")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.988108, -0.0768812, 0.133162, 1.73002e-08, 0.866025, 0.5, -0.153762, -0.494055, 0.855726, -0.0268892, 0, 0)
 shadow_enabled = true
-directional_shadow_max_distance = 15.0
+directional_shadow_max_distance = 10.0
