@@ -7,14 +7,13 @@
 [ext_resource type="Script" path="res://camera_3d.gd" id="5_i2tlq"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_vd5m0"]
-orientation = 2
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bn6nc"]
 render_priority = 0
 shader = ExtResource("1_43x1i")
 shader_parameter/heightScale = 0.05
 shader_parameter/minLayers = 8.0
-shader_parameter/maxLayers = 10.0
+shader_parameter/maxLayers = 20.0
 shader_parameter/diffuseMap = ExtResource("3_72k72")
 shader_parameter/normalMap = ExtResource("4_hiapp")
 shader_parameter/depthMap = ExtResource("2_bjkea")
@@ -35,19 +34,15 @@ sky = SubResource("Sky_4sawx")
 [node name="Node2D" type="Node3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.00118679, 0.999999, 0, -0.999999, 0.00118679, 0, 0.184829, -0.619111)
+transform = Transform3D(-0.338787, 0, 0.940863, 0, 1, 0, -0.940863, 0, -0.338787, 0, 0.143489, 0)
 mesh = SubResource("PlaneMesh_vd5m0")
 surface_material_override/0 = SubResource("ShaderMaterial_bn6nc")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_hhnet")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.355825, 0.934553, 0, -0.934553, 0.355825, 0, 0, 0)
-shadow_enabled = true
-
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.801372, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05652, -0.491686)
 mesh = SubResource("SphereMesh_pvnep")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
@@ -56,3 +51,9 @@ mesh = SubResource("PlaneMesh_8j62o")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.904142, 0.427232, 0, -0.427232, 0.904142, 0, 0.828439, 1.60668)
 script = ExtResource("5_i2tlq")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.849417, 0.281314, -0.446489, 0.0950348, 0.913779, 0.394937, 0.519094, 0.293034, -0.802915, -0.0268892, 0, 0)
+shadow_enabled = true
+directional_shadow_split_1 = 0.029
+directional_shadow_blend_splits = true

@@ -61,25 +61,35 @@ void fragment()
 {           
 	// offset texture coordinates with Parallax Mapping
 	vec3 world_vertex = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	mat3 tangent_basis = mat3(INV_VIEW_MATRIX) * mat3(
+	mat3 tangent_basis = mat3(
 	TANGENT,
 	-BINORMAL,
 	NORMAL);
 	
-	vec3 viewDir = transpose(tangent_basis) * normalize(CAMERA_POSITION_WORLD - world_vertex);
+	vec3 viewDir = transpose(mat3(INV_VIEW_MATRIX) * tangent_basis) * normalize(CAMERA_POSITION_WORLD - world_vertex);
 	vec2 texCoords = UV;
 	float offset;
 	texCoords = ParallaxMapping(UV,  viewDir, offset);       
 	if(texCoords.x > 1.0 || texCoords.y > 1.0 || texCoords.x < 0.0 || texCoords.y < 0.0)
 	    discard;
 
-	// obtain normal from normal map
-	vec3 normal = texture(normalMap, texCoords).rgb;
-	NORMAL_MAP = -normalize(normal * 2.0 - 1.0);   
+	NORMAL_MAP = ((texture(normalMap, texCoords).rgb * 2. - 1.) * vec3(1, -1, 1) + 1.) / 2.;
+	//NORMAL_MAP_DEPTH = 2.;   
 
 	// get diffuse color
 	ALBEDO = texture(diffuseMap, texCoords).rgb;
+	
 	LIGHT_VERTEX.z -= offset;
+	
+	vec4 view_position = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2. - 1., FRAGCOORD.z, 1.0);
+	view_position.xyz /= view_position.w;
+	
+	view_position.z -= offset;
+	
+	vec4 ndc_position = PROJECTION_MATRIX * vec4(view_position.xyz, 1.0);
+	ndc_position.xyz /= ndc_position.w;
+	
+	DEPTH = ndc_position.z;
 }
 
 //void light() {
