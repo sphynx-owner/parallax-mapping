@@ -17,6 +17,8 @@ uniform bool compressed_normals = true;
 
 uniform vec2 texture_scale = vec2(1.0);
 
+uniform bool discard_edge = true;
+
 void vertex() {
 	// Called for every vertex the material is visible on.
 }
@@ -33,15 +35,15 @@ vec3 get_normal(vec2 uv) {
 	return compressed_normals ? ((texture(normalMap, uv * texture_scale).rgb * 2. - 1.) * vec3(1, -1, 1) + 1.) / 2. : texture(normalMap, uv * texture_scale).rgb;
 }
 
-vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir, out float offset)
+vec2 ParallaxMapping(vec2 texCoords, vec3 tangent_view_dir, out float offset)
 { 
-	float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));  
+	float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), tangent_view_dir)));  
 	// calculate the size of each layer
 	float layerDepth = 1.0 / numLayers;
 	// depth of current layer
 	float currentLayerDepth = 0.0;
 	// the amount to shift the texture coordinates per layer (from vector P)
-	vec2 P = viewDir.xy / viewDir.z * heightScale; 
+	vec2 P = tangent_view_dir.xy / tangent_view_dir.z * heightScale; 
 	vec2 deltaTexCoords = P / numLayers;
 
 	// get initial values
@@ -69,28 +71,30 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir, out float offset)
 	float weight = afterDepth / (afterDepth - beforeDepth);
 	vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
 	
-	offset = currentLayerDepth / abs(dot(vec3(0.0, 0.0, 1.0), viewDir)) * heightScale;
+	offset = currentLayerDepth / abs(dot(vec3(0.0, 0.0, 1.0), tangent_view_dir)) * heightScale;
 	
 	return finalTexCoords;
 }
 
 void fragment()
 {           
-	// offset texture coordinates with Parallax Mapping
-	vec3 world_vertex = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	vec4 view_ray_origin = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2. - 1., 1., 1.0);
+	view_ray_origin.xyz /= view_ray_origin.w;
+	
+	vec3 view_direction = normalize(view_ray_origin.xyz - VERTEX);
+	
 	mat3 tangent_basis = mat3(
 	TANGENT,
 	-BINORMAL,
 	NORMAL);
 	
-	vec3 viewDir = transpose(mat3(INV_VIEW_MATRIX) * tangent_basis) * normalize(CAMERA_POSITION_WORLD - world_vertex);
+	vec3 tangent_view_dir = transpose(tangent_basis) * view_direction;
 	vec2 texCoords = UV;
 	float offset;
-	texCoords = ParallaxMapping(UV,  viewDir, offset);       
-	if(texCoords.x > 1.0 || texCoords.y > 1.0 || texCoords.x < 0.0 || texCoords.y < 0.0)
+	texCoords = ParallaxMapping(UV, tangent_view_dir, offset);       
+	
+	if(discard_edge && (texCoords.x > 1.0 || texCoords.y > 1.0 || texCoords.x < 0.0 || texCoords.y < 0.0))
 	    discard;
-	
-	
 	
 	NORMAL_MAP =  get_normal(texCoords);
 	NORMAL_MAP_DEPTH = 2.;   
@@ -98,12 +102,12 @@ void fragment()
 	// get diffuse color
 	ALBEDO = get_diffuse(texCoords).rgb;
 	
-	LIGHT_VERTEX.z -= offset;
+	LIGHT_VERTEX -= offset * view_direction;
 	
 	vec4 view_position = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2. - 1., FRAGCOORD.z, 1.0);
 	view_position.xyz /= view_position.w;
 	
-	view_position.z -= offset;
+	view_position.xyz -= offset * view_direction;
 	
 	vec4 ndc_position = PROJECTION_MATRIX * vec4(view_position.xyz, 1.0);
 	ndc_position.xyz /= ndc_position.w;

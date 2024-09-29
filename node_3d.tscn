@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bdy6sc2cpokkb"]
+[gd_scene load_steps=19 format=3 uid="uid://bdy6sc2cpokkb"]
 
 [ext_resource type="Shader" path="res://parallax.gdshader" id="1_43x1i"]
 [ext_resource type="Texture2D" uid="uid://oivtxrpj846u" path="res://bricks2_disp.jpg" id="2_bjkea"]
@@ -20,6 +20,7 @@ shader_parameter/maxLayers = 20.0
 shader_parameter/inverse_height = true
 shader_parameter/compressed_normals = false
 shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/discard_edge = true
 shader_parameter/diffuseMap = ExtResource("3_7d35o")
 shader_parameter/normalMap = ExtResource("4_2obec")
 shader_parameter/depthMap = ExtResource("2_q0vlh")
@@ -35,6 +36,7 @@ shader_parameter/maxLayers = 20.0
 shader_parameter/inverse_height = false
 shader_parameter/compressed_normals = true
 shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/discard_edge = true
 shader_parameter/diffuseMap = ExtResource("3_72k72")
 shader_parameter/normalMap = ExtResource("4_hiapp")
 shader_parameter/depthMap = ExtResource("2_bjkea")
@@ -49,6 +51,20 @@ background_mode = 2
 sky = SubResource("Sky_4sawx")
 
 [sub_resource type="SphereMesh" id="SphereMesh_pvnep"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ntl0"]
+render_priority = 0
+shader = ExtResource("1_43x1i")
+shader_parameter/heightScale = 0.052
+shader_parameter/minLayers = 8.0
+shader_parameter/maxLayers = 32.0
+shader_parameter/inverse_height = false
+shader_parameter/compressed_normals = true
+shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/discard_edge = false
+shader_parameter/diffuseMap = ExtResource("3_72k72")
+shader_parameter/normalMap = ExtResource("4_hiapp")
+shader_parameter/depthMap = ExtResource("2_bjkea")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_8j62o"]
 
@@ -71,6 +87,7 @@ environment = SubResource("Environment_hhnet")
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.368743, 0.164764, -0.221929)
 mesh = SubResource("SphereMesh_pvnep")
+surface_material_override/0 = SubResource("ShaderMaterial_2ntl0")
 
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.81895, 0.164764, -0.221929)
@@ -86,3 +103,4 @@ script = ExtResource("5_i2tlq")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.988108, -0.0768812, 0.133162, 1.73002e-08, 0.866025, 0.5, -0.153762, -0.494055, 0.855726, -0.0268892, 0, 0)
 shadow_enabled = true
+directional_shadow_max_distance = 15.0
