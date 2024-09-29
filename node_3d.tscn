@@ -32,6 +32,7 @@ sky = SubResource("Sky_4sawx")
 [sub_resource type="PlaneMesh" id="PlaneMesh_8j62o"]
 
 [node name="Node2D" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00212109, -1.49012e-08, -0.00062418)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.338787, 0, 0.940863, 0, 1, 0, -0.940863, 0, -0.338787, 0.297619, 0.143489, 0)
@@ -42,7 +43,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_bn6nc")
 environment = SubResource("Environment_hhnet")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05652, -0.491686)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.368743, 0.164764, -0.221929)
 mesh = SubResource("SphereMesh_pvnep")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="."]

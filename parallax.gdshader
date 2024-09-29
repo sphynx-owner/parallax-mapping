@@ -3,7 +3,7 @@ shader_type spatial;
 // from https://learnopengl.com/Advanced-Lighting/Parallax-Mapping
 
 uniform sampler2D diffuseMap : source_color, filter_linear_mipmap;
-uniform sampler2D normalMap : source_color, filter_linear_mipmap;
+uniform sampler2D normalMap : source_color, filter_linear;
 uniform sampler2D depthMap : source_color, filter_linear;
 
 uniform float heightScale;
