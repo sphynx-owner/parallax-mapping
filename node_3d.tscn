@@ -1,0 +1,40 @@
+[gd_scene load_steps=10 format=3 uid="uid://bdy6sc2cpokkb"]
+
+[ext_resource type="Shader" path="res://parallax.gdshader" id="1_43x1i"]
+[ext_resource type="Texture2D" uid="uid://oivtxrpj846u" path="res://bricks2_disp.jpg" id="2_bjkea"]
+[ext_resource type="Texture2D" uid="uid://buvqkj60458ss" path="res://bricks2.jpg" id="3_72k72"]
+[ext_resource type="Texture2D" uid="uid://bu6ox4g2buumh" path="res://bricks2_normal.jpg" id="4_hiapp"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vd5m0"]
+orientation = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bn6nc"]
+render_priority = 0
+shader = ExtResource("1_43x1i")
+shader_parameter/heightScale = 0.05
+shader_parameter/minLayers = 8.0
+shader_parameter/maxLayers = 5.0
+shader_parameter/diffuseMap = ExtResource("3_72k72")
+shader_parameter/normalMap = ExtResource("4_hiapp")
+shader_parameter/depthMap = ExtResource("2_bjkea")
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5nu3d"]
+
+[sub_resource type="Sky" id="Sky_4sawx"]
+sky_material = SubResource("ProceduralSkyMaterial_5nu3d")
+
+[sub_resource type="Environment" id="Environment_hhnet"]
+background_mode = 2
+sky = SubResource("Sky_4sawx")
+
+[node name="Node2D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_vd5m0")
+surface_material_override/0 = SubResource("ShaderMaterial_bn6nc")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_hhnet")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.505507, -0.862823, 0, 0.862823, 0.505507, 0, 0, 0)
