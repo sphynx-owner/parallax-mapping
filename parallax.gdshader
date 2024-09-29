@@ -12,8 +12,25 @@ uniform float heightScale;
 uniform float minLayers = 8.;
 uniform float maxLayers = 32.;
 
+uniform bool inverse_height = false;
+uniform bool compressed_normals = true;
+
+uniform vec2 texture_scale = vec2(1.0);
+
 void vertex() {
 	// Called for every vertex the material is visible on.
+}
+
+vec4 get_diffuse(vec2 uv) {
+	return texture(diffuseMap, uv * texture_scale);
+}
+
+float get_height(vec2 uv) {
+	return inverse_height ? 1. - texture(depthMap, uv * texture_scale).r : texture(depthMap, uv * texture_scale).r;
+}
+
+vec3 get_normal(vec2 uv) {
+	return compressed_normals ? ((texture(normalMap, uv * texture_scale).rgb * 2. - 1.) * vec3(1, -1, 1) + 1.) / 2. : texture(normalMap, uv * texture_scale).rgb;
 }
 
 vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir, out float offset)
@@ -29,14 +46,14 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir, out float offset)
 
 	// get initial values
 	vec2  currentTexCoords     = texCoords;
-	float currentDepthMapValue = texture(depthMap, currentTexCoords).r;
+	float currentDepthMapValue = get_height(currentTexCoords);
 	    
 	while(currentLayerDepth < currentDepthMapValue)
 	{
 	    // shift texture coordinates along direction of P
 	    currentTexCoords -= deltaTexCoords;
 	    // get depthmap value at current texture coordinates
-	    currentDepthMapValue = texture(depthMap, currentTexCoords).r;  
+	    currentDepthMapValue = get_height(currentTexCoords);  
 	    // get depth of next layer
 	    currentLayerDepth += layerDepth;  
 	}
@@ -46,7 +63,7 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir, out float offset)
 
 	// get depth after and before collision for linear interpolation
 	float afterDepth  = currentDepthMapValue - currentLayerDepth;
-	float beforeDepth = texture(depthMap, prevTexCoords).r - currentLayerDepth + layerDepth;
+	float beforeDepth = get_height(prevTexCoords) - currentLayerDepth + layerDepth;
 
 	// interpolation of texture coordinates
 	float weight = afterDepth / (afterDepth - beforeDepth);
@@ -72,12 +89,14 @@ void fragment()
 	texCoords = ParallaxMapping(UV,  viewDir, offset);       
 	if(texCoords.x > 1.0 || texCoords.y > 1.0 || texCoords.x < 0.0 || texCoords.y < 0.0)
 	    discard;
-
-	NORMAL_MAP = ((texture(normalMap, texCoords).rgb * 2. - 1.) * vec3(1, -1, 1) + 1.) / 2.;
-	//NORMAL_MAP_DEPTH = 2.;   
+	
+	
+	
+	NORMAL_MAP =  get_normal(texCoords);
+	NORMAL_MAP_DEPTH = 2.;   
 
 	// get diffuse color
-	ALBEDO = texture(diffuseMap, texCoords).rgb;
+	ALBEDO = get_diffuse(texCoords).rgb;
 	
 	LIGHT_VERTEX.z -= offset;
 	

@@ -1,8 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://bdy6sc2cpokkb"]
+[gd_scene load_steps=18 format=3 uid="uid://bdy6sc2cpokkb"]
 
 [ext_resource type="Shader" path="res://parallax.gdshader" id="1_43x1i"]
 [ext_resource type="Texture2D" uid="uid://oivtxrpj846u" path="res://bricks2_disp.jpg" id="2_bjkea"]
+[ext_resource type="Texture2D" uid="uid://tg6qoondr4e0" path="res://ganges_river_pebbles_disp_1k.jpg" id="2_q0vlh"]
+[ext_resource type="Texture2D" uid="uid://bfbnylce7ymd5" path="res://ganges_river_pebbles_diff_1k.jpg" id="3_7d35o"]
 [ext_resource type="Texture2D" uid="uid://buvqkj60458ss" path="res://bricks2.jpg" id="3_72k72"]
+[ext_resource type="Texture2D" uid="uid://blhg72k47dvtx" path="res://ganges_river_pebbles_nor_gl_1k.jpg" id="4_2obec"]
 [ext_resource type="Texture2D" uid="uid://bu6ox4g2buumh" path="res://bricks2_normal.jpg" id="4_hiapp"]
 [ext_resource type="Script" path="res://camera_3d.gd" id="5_i2tlq"]
 
@@ -14,6 +17,24 @@ shader = ExtResource("1_43x1i")
 shader_parameter/heightScale = 0.05
 shader_parameter/minLayers = 8.0
 shader_parameter/maxLayers = 20.0
+shader_parameter/inverse_height = true
+shader_parameter/compressed_normals = false
+shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/diffuseMap = ExtResource("3_7d35o")
+shader_parameter/normalMap = ExtResource("4_2obec")
+shader_parameter/depthMap = ExtResource("2_q0vlh")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rxek4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1gjei"]
+render_priority = 0
+shader = ExtResource("1_43x1i")
+shader_parameter/heightScale = 0.05
+shader_parameter/minLayers = 8.0
+shader_parameter/maxLayers = 20.0
+shader_parameter/inverse_height = false
+shader_parameter/compressed_normals = true
+shader_parameter/texture_scale = Vector2(1, 1)
 shader_parameter/diffuseMap = ExtResource("3_72k72")
 shader_parameter/normalMap = ExtResource("4_hiapp")
 shader_parameter/depthMap = ExtResource("2_bjkea")
@@ -35,15 +56,24 @@ sky = SubResource("Sky_4sawx")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00212109, -1.49012e-08, -0.00062418)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(-0.338787, 0, 0.940863, 0, 1, 0, -0.940863, 0, -0.338787, 0.297619, 0.143489, 0)
+transform = Transform3D(0.022635, 0, 0.999744, 0, 1, 0, -0.999744, 0, 0.022635, 0, 0.192144, 0)
 mesh = SubResource("PlaneMesh_vd5m0")
 surface_material_override/0 = SubResource("ShaderMaterial_bn6nc")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.96389, 0.143654, 0)
+mesh = SubResource("PlaneMesh_rxek4")
+surface_material_override/0 = SubResource("ShaderMaterial_1gjei")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_hhnet")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.368743, 0.164764, -0.221929)
+mesh = SubResource("SphereMesh_pvnep")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.81895, 0.164764, -0.221929)
 mesh = SubResource("SphereMesh_pvnep")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
@@ -54,5 +84,5 @@ transform = Transform3D(1, 0, 0, 0, 0.904142, 0.427232, 0, -0.427232, 0.904142, 
 script = ExtResource("5_i2tlq")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.849417, 0.281314, -0.446489, -0.257183, 0.518124, 0.815723, 0.460812, 0.807719, -0.367754, -0.0268892, 0, 0)
+transform = Transform3D(0.988108, -0.0768812, 0.133162, 1.73002e-08, 0.866025, 0.5, -0.153762, -0.494055, 0.855726, -0.0268892, 0, 0)
 shadow_enabled = true
