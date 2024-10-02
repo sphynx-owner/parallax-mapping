@@ -79,7 +79,7 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 tangent_view_dir, out float offset)
 
 void fragment()
 {           
-	vec3 view_direction =  normalize(VIEW);
+	vec3 view_direction =  VIEW;
 	
 	mat3 tangent_basis = mat3(
 	TANGENT,
